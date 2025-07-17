@@ -61,9 +61,6 @@
                 <p><strong>Actors:</strong> {{ movie_details.actors }}</p>
                 <p class="flex items-center">
                     <strong class="mr-2">Rating:</strong>
-                    {% for i in "12345"|slice:":movie_details.rating"|make_list %}
-                        <i class="fas fa-star text-yellow-400"></i>
-                    {% endfor %}
                     <span id="starRating" data-rating="{{ movie_details.rating }}"></span>
 
                 </p>
