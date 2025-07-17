@@ -11,9 +11,10 @@ import re
 @login_required(login_url='login')
 def index(request):
     movies = Movie.objects.all()
-
+    featured_movie = movies[len(movies)-1]
     context = {
-        'movies': movies
+        'movies': movies,
+        'featured_movie': featured_movie
     }
 
     return render(request, 'index.html', context)
@@ -27,6 +28,17 @@ def movie(request,pk):
     }
     
     return render(request,'movie.html',context)
+
+def genre(request,pk):
+    movie_genre = pk
+    movies = Movie.objects.filter(genre=movie_genre)
+
+    context = {
+        'movies': movies,
+        'movie_genre': movie_genre
+    }
+
+    return render(request, 'genre.html', context)
 
 def search(request):
     if request.method == 'POST':
