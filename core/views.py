@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Movie
+from .models import Movie, MovieList
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+import re
 
 # Create your views here.
 @login_required(login_url='login')
@@ -25,8 +28,36 @@ def movie(request,pk):
     
     return render(request,'movie.html',context)
 
-def add_to_list(request):
+def my_list(request):
+    
     pass
+
+def add_to_list(request):
+    if request.method == 'POST':
+        movie_url_id = request.POST.get('movie_id')
+
+        uuid_pattern = r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'
+
+        match = re.search(uuid_pattern, movie_url_id)
+        movie_id = match.group() if match else None
+
+        if not movie_id:
+            return JsonResponse({'status': 'error', 'message': 'Invalid UUID provided'}, status=400)
+
+        movie = get_object_or_404(Movie, uuid=movie_id)
+        movie_list, created = MovieList.objects.get_or_create(
+            owner_user=request.user,
+            movie=movie
+        )
+
+        if created:
+            response_data = {'status': 'success', 'message':'Added ✓'}
+        else:
+            response_data = {'status': 'info', 'message':'Movie already in list'}
+        
+        return JsonResponse(response_data)
+    else:
+        response_data = JsonResponse({'status': 'info', 'message':'Invalid request'}, status=405)
 
 def login(request):
     if request.user.is_authenticated:
