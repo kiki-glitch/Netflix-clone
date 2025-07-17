@@ -17,6 +17,11 @@ class Movie(models.Model):
         ('fantasy', 'Fantasy'),
     ]
 
+    TYPE_CHOICES = [
+        ('movie', 'Movie'),
+        ('series', 'Series')
+    ]
+
     uuid = models.UUIDField(default=uuid.uuid4)
     title = models.CharField(max_length = 255)
     description = models.TextField()
@@ -28,6 +33,16 @@ class Movie(models.Model):
     video = models.FileField(upload_to='movie_videos')
     movie_views = models.IntegerField(default=0)
 
+     # New fields
+    is_featured = models.BooleanField(default=False)
+    trailer = models.URLField(blank=True, null=True)
+    actors = models.CharField(max_length=255, blank=True)
+    language = models.CharField(max_length=100, blank=True)
+    subtitles = models.CharField(max_length=255, blank=True)
+    rating = models.FloatField(default=0.0)
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='series')
+    tagline = models.CharField(max_length=255, blank=True)
+
     def __str__(self):
         return self.title
 
@@ -37,3 +52,4 @@ class MovieList(models.Model):
         on_delete=models.CASCADE, 
     )
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+
