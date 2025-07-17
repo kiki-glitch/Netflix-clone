@@ -64,9 +64,8 @@
                     {% for i in "12345"|slice:":movie_details.rating"|make_list %}
                         <i class="fas fa-star text-yellow-400"></i>
                     {% endfor %}
-                    <span class="ml-2">({{ movie_details.rating }}/10)</span>
-                    <span class="ml-2">({{ movie_details.rating }}/10) "★".repeat(Math.floor(rating)) + " " + rating + "/10</span>
-                
+                    <span id="starRating" data-rating="{{ movie_details.rating }}"></span>
+
                 </p>
             </div>
 
@@ -89,6 +88,21 @@
 
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const starEl = document.getElementById("starRating");
+            if (starEl) {
+                const rating = parseFloat(starEl.getAttribute("data-rating")) || 0;
+                const filledStars = Math.floor(rating / 2); // out of 5
+                const maxStars = 5;
+
+                const stars = "★".repeat(filledStars) + "☆".repeat(maxStars - filledStars);
+                starEl.innerHTML = `<span class="text-yellow-400">${stars}</span>`;
+            }
+        });
+    </script>
+
 </body>
 
 </html>
