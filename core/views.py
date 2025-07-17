@@ -30,7 +30,17 @@ def movie(request,pk):
 
 def my_list(request):
     
-    pass
+    movie_list = MovieList.objects.filter(owner_user=request.user)
+    user_movie_list = []
+
+    for movie in movie_list:
+        user_movie_list.append(movie.movie)
+        context = {
+            'movies': user_movie_list
+        }
+    
+    return render(request, 'my_list.html', context)
+
 
 def add_to_list(request):
     if request.method == 'POST':
