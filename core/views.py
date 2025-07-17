@@ -28,6 +28,20 @@ def movie(request,pk):
     
     return render(request,'movie.html',context)
 
+def search(request):
+    if request.method == 'POST':
+        search_term = request.POST['search_term']
+        movies = Movie.objects.filter(title__icontains = search_term)
+
+        context = {
+            'movies': movies,
+            'search_term': search_term,
+            }
+    
+        return render(request, 'search.html', context)
+    else:
+        return redirect('/')
+
 def my_list(request):
     
     movie_list = MovieList.objects.filter(owner_user=request.user)
@@ -40,7 +54,6 @@ def my_list(request):
         }
     
     return render(request, 'my_list.html', context)
-
 
 def add_to_list(request):
     if request.method == 'POST':
