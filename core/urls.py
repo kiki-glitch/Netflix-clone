@@ -6,5 +6,6 @@ urlpatterns = [
     path('login', views.login, name='login'),
     path('signup', views.signup, name='signup'),
     path('logout', views.logout, name='logout'),
-    path('add-to-list', views.add_to_list, name='add-to-list')
+    path('add-to-list', views.add_to_list, name='add-to-list'),
+    path('movie/<str:pk>/', views.movie, name='movie')
 ]

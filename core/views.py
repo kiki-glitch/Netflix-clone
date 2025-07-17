@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Movie
 
 # Create your views here.
+@login_required(login_url='login')
 def index(request):
     movies = Movie.objects.all()
 
@@ -13,6 +14,16 @@ def index(request):
     }
 
     return render(request, 'index.html', context)
+
+def movie(request,pk):
+    movie_uuid = pk
+    movie_details = Movie.objects.get(uuid=movie_uuid)
+
+    context ={
+        'movie_details': movie_details
+    }
+    
+    return render(request,'movie.html',context)
 
 def add_to_list(request):
     pass
